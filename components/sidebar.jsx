@@ -21,7 +21,7 @@ const Sidebar = ({ toggle }) => {
     { title: 'Inbox', src: 'Chat' },
   ];
   return (
-    <div className="flex bg-gray-700">
+    <div className="flex bg-blue-900">
       <div
         className={` ${
           open ? 'w-auto' : 'w-20 '
@@ -60,7 +60,7 @@ const Sidebar = ({ toggle }) => {
             className={`flex  rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 `}
           >
             <img src={`/icon/Chart_fill.png`} />
-            <Link href={'/report'} className={`${!open && 'hidden'} origin-left duration-200`}>
+            <Link href={'/report'} className={`${!open && 'hidden'} font-yekan origin-left duration-200`}>
               گزارش
             </Link>
           </li>

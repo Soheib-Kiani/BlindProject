@@ -47,27 +47,46 @@ const Main = () => {
   }, [buttonStatus]);
 
   return (
-    <div className="App bg-[url('/Parez.jpg')] object-fill">
+    <div className="">
       {/* <HttpCall /> */}
 
       {!buttonStatus ? (
         <div className="flex space-x-4">
           <button
             onClick={handleClick}
-            className=" flex px-4 py-2 font-semibold bg-rose-500 text-white rounded-md hover:bg-red-700 space-x-2 align-middle"
+            className="button w-40 h-16 bg-blue-500 rounded-lg cursor-pointer select-none
+    active:translate-y-2  active:[box-shadow:0_0px_0_0_#1b6ff8,0_0px_0_0_#1b70f841]
+    active:border-b-[0px]
+    transition-all duration-150 [box-shadow:0_10px_0_0_#1b6ff8,0_15px_0_0_#1b70f841]
+    border-b-[1px] border-blue-400
+  "
+          >
+            <span class="flex flex-col justify-center items-center h-full text-white font-bold text-lg ">
+              پخش زنده
+            </span>
+          </button>
+          {/* <button
+            onClick={handleClick}
+            className=" flex px-4 py-2 shadow-2xl font-semibold bg-rose-500 text-white rounded-md hover:bg-gray-700 space-x-2 align-middle"
           >
             <HiOutlinePlay className="text-2xl mx-2"></HiOutlinePlay>
             <span> پخش زنده</span>
-          </button>
+          </button> */}
         </div>
       ) : (
         <div className="flex space-x-4">
           <button
             onClick={handleClick}
-            className=" flex px-4 py-2 font-semibold bg-orange-500 text-white rounded-md hover:bg-orange-700 space-x-2 align-middle"
+            className="button w-40 h-16 bg-blue-500 rounded-lg cursor-pointer select-none
+    active:translate-y-2  active:[box-shadow:0_0px_0_0_#1b6ff8,0_0px_0_0_#1b70f841]
+    active:border-b-[0px]
+    transition-all duration-150 [box-shadow:0_10px_0_0_#1b6ff8,0_15px_0_0_#1b70f841]
+    border-b-[1px] border-blue-400
+  "
           >
-            <HiOutlineStop className="text-2xl mx-2"></HiOutlineStop>
-            <span> توقف پخش</span>
+            <span class="flex flex-col justify-center items-center h-full text-white font-bold text-lg ">
+             توقف پخش
+            </span>
           </button>
         </div>
       )}

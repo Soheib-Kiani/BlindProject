@@ -16,12 +16,12 @@ function RootLayout({ children }) {
                 <title>سامانه پاریز</title>
             </head>
             <body>
-                <div className="flex bg-green-100">
+                <div className="flex ">
                     <Sidebar></Sidebar>
                     
                     <main className='w-full'>
-                        <Header></Header>
-                        <article className='m-4 border-2 p-4'>
+                        {/* <Header></Header> */}
+                        <article className='m-4 border-2 rounded-lg p-4'>
                             {children}
                         </article>
                     </main>

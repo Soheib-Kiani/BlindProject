@@ -8,106 +8,95 @@ import DatePicker from 'react-multi-date-picker';
 
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-
+import {
+  digitsArToFa,
+  digitsArToEn,
+  digitsEnToFa,
+  digitsFaToEn,
+  digitsEnToAr,
+  digitsFaToAr,
+} from '@persian-tools/persian-tools';
+import gregorian from 'react-date-object/calendars/gregorian';
+import gregorian_en from 'react-date-object/locales/gregorian_en';
 const Report = () => {
   const { control, handleSubmit } = useForm();
-  const [submittedDate, setSubmittedDate] = useState();
+  const [submitFirst, setSubmitFirst] = useState();
+  const [submitSecond, setSubmitSecond] = useState();
 
-  const onSubmit = ({ date }) => {
-    setSubmittedDate(date);
+  // const onSubmitFirst = () => {
+  //   setSubmitFirst(data);
+  // };
+  // const onSubmitSecond = ({ date }) => {
+  //   setSubmitSecond(date);
+  // };
+  // console.log('data', submitFirst?.format?.('YYYY-MM-DD'));
+
+  let x = submitFirst?.convert(gregorian, gregorian_en).format('YYYY-MM-DD');
+  let xfa = submitFirst?.convert(persian, persian_fa).format('YYYY-MM-DD');
+  let y = submitSecond?.format?.('YYYY-MM-DD');
+  // var en_number = "0123456789";
+  // let ii = x.toString()
+  console.log(x);
+  console.log(xfa);
+  console.log(y);
+
+  // const p2e = ({ s }) => {
+  //   return s.replace(/[۰-۹]/g, (d) => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+  // };
+  // console.log(p2e('۱۴۰۱-۱۱-۲۶'));
+  const getCity = async (e) => {
+    // e.preventDefault()
+    try {
+      const resApi = await fetch('http://176.65.252.189:4001/date_filter/', {
+        method: 'POST',
+        body: JSON.stringify({
+          startdate: x,
+          enddate: y,
+        }),
+      });
+
+      const data = await resApi.json();
+      console.log(data);
+      console.log('status', resApi.status);
+    } catch (e) {
+      console.log(e.message);
+    }
   };
-  console.log('data',submittedDate?.format?.('YYYY-MM-DD'))
-  // console.log(x);
-  // useEffect(() => {
-  //   fetch(`http://127.0.0.1:8000/mydate_filter/`)
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setpost(data);
-  //       console.log(data);
-  //     })
-  //     .catch((error) => console.log(error));
-  // }, []);
-  // useEffect(() => {
-  //     axios
-  //       .get(`http://127.0.0.1:8000/d/getmynews/6`)
-  //       .then((res) => {
-  //         setpost(res.data);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   },[id]);
 
   return (
     // <div>
     <div>
       {/* Date */}
       <>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        {/* First */}
+        <div>
           <label>از تاریخ</label>
-          <Controller
-            control={control}
-            name="date"
-            rules={{ required: true }} //optional
-            render={({
-              field: { onChange, name, value },
-              fieldState: { invalid, isDirty }, //optional
-              formState: { errors }, //optional, but necessary if you want to show an error message
-            }) => (
-              <>
-                <DatePicker
-                  value={value || ''}
-                  onChange={(date) => {
-                    onChange(date?.isValid ? date : '');
-                  }}
-                  format={'YYYY-MM-DD'}
-                  calendar={persian}
-                  locale={persian_fa}
-                  calendarPosition="bottom-right"
-                />
-                {errors && errors[name] && errors[name].type === 'required' && (
-                  //if you want to show an error message
-                  <span>your error message !</span>
-                )}
-              </>
-            )}
+          <DatePicker
+            inputClass="form-control"
+            calendar={persian}
+            locale={persian_fa}
+            value={submitFirst}
+            onChange={setSubmitFirst}
+            format="YYYY-MM-DD"
           />
-          <input type="submit" />
-        </form>
-        <p>تاریخ ارسال شده: {submittedDate?.format?.('YYYY-MM-DD')}</p>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <label>از تاریخ</label>
-          <Controller
-            control={control}
-            name="date"
-            rules={{ required: true }} //optional
-            render={({
-              field: { onChange, name, value },
-              fieldState: { invalid, isDirty }, //optional
-              formState: { errors }, //optional, but necessary if you want to show an error message
-            }) => (
-              <>
-                <DatePicker
-                  value={value || ''}
-                  onChange={(date) => {
-                    onChange(date?.isValid ? date : '');
-                  }}
-                  format={'YYYY-MM-DD'}
-                  calendar={persian}
-                  locale={persian_fa}
-                  calendarPosition="bottom-right"
-                />
-                {errors && errors[name] && errors[name].type === 'required' && (
-                  //if you want to show an error message
-                  <span>your error message !</span>
-                )}
-              </>
-            )}
+        </div>
+        {/* second */}
+        <p>First {submitFirst?.format?.('YYYY-MM-DD')}</p>
+        <div>
+          <label>تا تاریخ</label>
+          <DatePicker
+            inputClass="form-control"
+            calendar={persian}
+            locale={persian_fa}
+            value={submitSecond}
+            onChange={setSubmitSecond}
+            format="YYYY-MM-DD"
           />
-          <input type="submit" />
-        </form>
-        <p>به تاریخ {submittedDate?.format?.('YYYY-MM-DD')}</p>
+        </div>
+        <p>second {submitSecond?.format?.('YYYY-MM-DD')}</p>
+        <button onClick={() => getCity()}>Ersal</button>
       </>
+      {/* ////////////////////////////////////////// */}
       <div className="h-[320px] bg-black w-[640px] mx-auto relative py-2">
         {/* <img
           src={`data:image/jpeg;base64,${frame}`}

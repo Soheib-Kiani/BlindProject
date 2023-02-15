@@ -4,10 +4,6 @@
 
 import persian from 'react-date-object/calendars/persian';
 import persian_fa from 'react-date-object/locales/persian_fa';
-import TimePicker from 'react-multi-date-picker/plugins/time_picker';
-import DatePanel from 'react-multi-date-picker/plugins/date_panel';
-import gregorian from 'react-date-object/calendars/gregorian';
-import gregorian_en from 'react-date-object/locales/gregorian_en';
 import DatePicker from 'react-multi-date-picker';
 
 import React, { useEffect, useState } from 'react';
@@ -48,6 +44,7 @@ const Report = () => {
       {/* Date */}
       <>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <label>از تاریخ</label>
           <Controller
             control={control}
             name="date"
@@ -78,6 +75,38 @@ const Report = () => {
           <input type="submit" />
         </form>
         <p>تاریخ ارسال شده: {submittedDate?.format?.('YYYY-MM-DD')}</p>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <label>از تاریخ</label>
+          <Controller
+            control={control}
+            name="date"
+            rules={{ required: true }} //optional
+            render={({
+              field: { onChange, name, value },
+              fieldState: { invalid, isDirty }, //optional
+              formState: { errors }, //optional, but necessary if you want to show an error message
+            }) => (
+              <>
+                <DatePicker
+                  value={value || ''}
+                  onChange={(date) => {
+                    onChange(date?.isValid ? date : '');
+                  }}
+                  format={'YYYY-MM-DD'}
+                  calendar={persian}
+                  locale={persian_fa}
+                  calendarPosition="bottom-right"
+                />
+                {errors && errors[name] && errors[name].type === 'required' && (
+                  //if you want to show an error message
+                  <span>your error message !</span>
+                )}
+              </>
+            )}
+          />
+          <input type="submit" />
+        </form>
+        <p>به تاریخ {submittedDate?.format?.('YYYY-MM-DD')}</p>
       </>
       <div className="h-[320px] bg-black w-[640px] mx-auto relative py-2">
         {/* <img

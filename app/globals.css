@@ -14,3 +14,11 @@
 body{
   direction: rtl;
 }
+.form-control{
+  border-radius: 15px;
+  border: 1px #0c8af8 solid;
+  padding: 4px 12px;
+  background-color: white;
+  height: 22px;
+  box-shadow: 0 0 2px #0074d9;
+}

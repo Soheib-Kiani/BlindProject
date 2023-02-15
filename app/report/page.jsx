@@ -22,6 +22,7 @@ const Report = () => {
   const { control, handleSubmit } = useForm();
   const [submitFirst, setSubmitFirst] = useState();
   const [submitSecond, setSubmitSecond] = useState();
+  const [results, setResult] = useState([]);
 
   // const onSubmitFirst = () => {
   //   setSubmitFirst(data);
@@ -31,24 +32,21 @@ const Report = () => {
   // };
   // console.log('data', submitFirst?.format?.('YYYY-MM-DD'));
 
-  let x = submitFirst?.convert(gregorian, gregorian_en).format('YYYY-MM-DD');
-  let xfa = submitFirst?.convert(persian, persian_fa).format('YYYY-MM-DD');
+  let x = submitFirst?.format?.('YYYY-MM-DD');
   let y = submitSecond?.format?.('YYYY-MM-DD');
   // var en_number = "0123456789";
-  // let ii = x.toString()
+
   console.log(x);
-  console.log(xfa);
   console.log(y);
 
-  // const p2e = ({ s }) => {
-  //   return s.replace(/[۰-۹]/g, (d) => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
-  // };
-  // console.log(p2e('۱۴۰۱-۱۱-۲۶'));
   const getCity = async (e) => {
     // e.preventDefault()
     try {
       const resApi = await fetch('http://176.65.252.189:4001/date_filter/', {
         method: 'POST',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
         body: JSON.stringify({
           startdate: x,
           enddate: y,
@@ -56,6 +54,7 @@ const Report = () => {
       });
 
       const data = await resApi.json();
+      setResult(data);
       console.log(data);
       console.log('status', resApi.status);
     } catch (e) {
@@ -68,33 +67,42 @@ const Report = () => {
     <div>
       {/* Date */}
       <>
-        {/* First */}
         <div>
-          <label>از تاریخ</label>
-          <DatePicker
-            inputClass="form-control"
-            calendar={persian}
-            locale={persian_fa}
-            value={submitFirst}
-            onChange={setSubmitFirst}
-            format="YYYY-MM-DD"
-          />
+          <div className="flex justify-center items-center mt-5  gap-x-10">
+            <div>
+              <label>از تاریخ</label>
+              <DatePicker
+                inputClass="form-control"
+                required
+                calendar={persian}
+                locale={persian_fa}
+                value={submitFirst}
+                onChange={setSubmitFirst}
+                format="YYYY-MM-DD"
+              />
+            </div>
+            <div>
+              <label>تا تاریخ</label>
+              <DatePicker
+                inputClass="form-control"
+                required
+                calendar={persian}
+                locale={persian_fa}
+                value={submitSecond}
+                onChange={setSubmitSecond}
+                format="YYYY-MM-DD"
+              />
+            </div>
+          </div>
         </div>
-        {/* second */}
-        <p>First {submitFirst?.format?.('YYYY-MM-DD')}</p>
-        <div>
-          <label>تا تاریخ</label>
-          <DatePicker
-            inputClass="form-control"
-            calendar={persian}
-            locale={persian_fa}
-            value={submitSecond}
-            onChange={setSubmitSecond}
-            format="YYYY-MM-DD"
-          />
+        <div className="grid place-items-center my-2">
+          <button
+            className="p-2 w-16 text-center h-auto bg-gray-800 text-white rounded-lg"
+            onClick={() => getCity()}
+          >
+            انتخاب
+          </button>
         </div>
-        <p>second {submitSecond?.format?.('YYYY-MM-DD')}</p>
-        <button onClick={() => getCity()}>Ersal</button>
       </>
       {/* ////////////////////////////////////////// */}
       <div className="h-[320px] bg-black w-[640px] mx-auto relative py-2">
@@ -105,13 +113,13 @@ const Report = () => {
         /> */}
       </div>
 
-      <div className="flex flex-col border-2 h-[300px] overflow-x-hidden mt-4">
+      <div className="flex flex-col border-2 rounded-lg h-[300px] overflow-x-hidden mt-4">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
             <div className="overflow-hidden">
               <table className="min-w-full table-auto tbl">
-                <thead>
-                  <tr>
+              <thead className='border-b'>
+                  <tr className='font-yekan'>
                     <th>ردیف</th>
                     <th>تاریخ</th>
                     <th>چراغ</th>
@@ -120,27 +128,23 @@ const Report = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {results.length > 1 ? (
-                    results.map((item, index) => {
-                      return (
-                        <tr key={index} className="border-2 border-gray-200">
-                          <td>{index}</td>
-                          <td>{item.date_created}</td>
-                          <td>{item.lightflag}</td>
+                  {results.map((item) => {
+                    return (
+                      <tr key={item.id} className="border-2 font-yekan border-gray-200">
+                        <td>{item.id}</td>
+                        <td>{item.date_created}</td>
+                        <td>{item.lightflag}</td>
 
-                          <td>{item.classobj}</td>
-                          <td>
-                            <img
-                              src={`data:image/png;base64,${item.img}`}
-                              width={100}
-                            />
-                          </td>
-                        </tr>
-                      );
-                    })
-                  ) : (
-                    <></>
-                  )} */}
+                        <td>{item.classobj}</td>
+                        <td>
+                          <img
+                            src={`data:image/png;base64,${item.img}`}
+                            width={100}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
